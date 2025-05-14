@@ -41,6 +41,9 @@ func main() {
 			selectedAllNetworks := cmd.Bool("all-networks")
 			hostPort := cmd.Int("host-port")
 			portStr := cmd.Args().First()
+			if portStr == "" {
+				return fmt.Errorf("Port is required")
+			}
 			port, err := strconv.Atoi(portStr)
 			if err != nil {
 				return fmt.Errorf("Invalid port: `%s`", portStr)
