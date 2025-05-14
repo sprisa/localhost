@@ -1,2 +1,5 @@
-# localhttps
-Local development certs for LAN services
+# localhost
+
+Local development certs for LAN https services.
+
+
