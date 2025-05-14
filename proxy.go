@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	_ "embed"
 	"fmt"
+	"net"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -22,7 +23,7 @@ var certKey []byte
 func StartProxyService(
 	ctx context.Context,
 	tlsCert tls.Certificate,
-	addrIp string,
+	addrIp net.IP,
 	listenPort int,
 	hostPort int,
 	availableSubdomains []string,
@@ -39,7 +40,10 @@ func StartProxyService(
 	proxy := httputil.NewSingleHostReverseProxy(url)
 
 	// Proxy request handler
-	handler.HandleFunc("/", proxy.ServeHTTP)
+	handler.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
+		res.Header().Add("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
+		proxy.ServeHTTP(res, req)
+	})
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", addrIp, listenPort),

@@ -54,12 +54,20 @@ func main() {
 				return err
 			}
 
-			ifaceToIps := map[string][]net.IP{}
+			_, ipnet, _ := net.ParseCIDR("198.18.0.0/15")
+
+			ifaceToIp := map[string]net.IP{}
 			for _, iface := range ifaces {
 				addrs, err := iface.Addrs()
 				if err != nil {
 					return fmt.Errorf("[%s] %w", iface.Name, err)
 				}
+
+				// Skip docker bridges
+				if strings.HasPrefix(iface.Name, "bridge") {
+					continue
+				}
+
 				var ipv4Addrs []net.IP
 				for _, addr := range addrs {
 					ip, _, err := net.ParseCIDR(addr.String())
@@ -70,25 +78,23 @@ func main() {
 					if ip == nil {
 						continue
 					}
+					if ip.Equal(localIp) == false && ip.IsPrivate() == false && ipnet.Contains(ip) == false {
+						continue
+					}
 					ipv4Addrs = append(ipv4Addrs, ip)
 				}
 
 				if len(ipv4Addrs) > 0 {
-					ifaceToIps[iface.Name] = ipv4Addrs
+					ifaceToIp[iface.Name] = ipv4Addrs[0]
 				}
 			}
 
 			const allChoice = "All"
 			var ifaceSelected = allChoice
 			if selectedAllNetworks == false {
-				choices := lo.MapToSlice(ifaceToIps, func(iface string, ips []net.IP) choose.Choice {
-					note := strings.Join(
-						lo.Map(ips, func(ip net.IP, _ int) string {
-							return ip.String()
-						}),
-						", ",
-					)
-					return choose.Choice{Text: iface, Note: "(" + note + ")"}
+				choices := lo.MapToSlice(ifaceToIp, func(iface string, ip net.IP) choose.Choice {
+					note := ip.String()
+					return choose.Choice{Text: iface, Note: note}
 				})
 				choices = append([]choose.Choice{{Text: allChoice, Note: "0.0.0.0"}}, choices...)
 				ifaceSelected, err = prompt.New().
@@ -99,24 +105,19 @@ func main() {
 				}
 			}
 
-			addrIp := "0.0.0.0"
-			selectedIp, found := ifaceToIps[ifaceSelected]
+			addrIp := allIp
+			selectedIp, found := ifaceToIp[ifaceSelected]
 			if found {
-				addrIp = selectedIp[0].String()
+				addrIp = selectedIp
 			}
 
 			availableSubdomains := []string{}
 			if ifaceSelected == allChoice {
-				availableSubdomains = append(availableSubdomains, "local")
-				for _, ip := range ifaceToIps {
-					availableSubdomains = append(availableSubdomains, strings.ReplaceAll(ip[0].String(), ".", "-"))
+				for _, ip := range ifaceToIp {
+					availableSubdomains = append(availableSubdomains, ipToSubdomain(ip))
 				}
 			} else {
-				if addrIp == "127.0.0.1" || addrIp == "0.0.0.0" {
-					availableSubdomains = append(availableSubdomains, "local")
-				} else {
-					availableSubdomains = append(availableSubdomains, strings.ReplaceAll(addrIp, ".", "-"))
-				}
+				availableSubdomains = append(availableSubdomains, ipToSubdomain(addrIp))
 			}
 
 			tlsCert, err := tls.X509KeyPair(cert, certKey)
@@ -132,4 +133,15 @@ func main() {
 		Log.Error().Msg(err.Error())
 		defer os.Exit(1)
 	}
+}
+
+var localIp = net.IP{127, 0, 0, 1}
+var allIp = net.IP{0, 0, 0, 0}
+
+func ipToSubdomain(ip net.IP) string {
+	if ip.Equal(localIp) || ip.Equal(allIp) {
+		return "local"
+	}
+
+	return strings.ReplaceAll(ip.String(), ".", "-")
 }
