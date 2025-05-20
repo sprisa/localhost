@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/samber/lo"
+	"github.com/sprisa/localhost/util"
 )
 
 //go:embed ssl/cert.pem
@@ -28,7 +29,7 @@ func StartProxyService(
 	hostPort int,
 	availableSubdomains []string,
 ) error {
-	log := Log.With().Int("targetPort", hostPort).Logger()
+	log := util.Log.With().Int("targetPort", hostPort).Logger()
 	handler := http.NewServeMux()
 
 	target := fmt.Sprintf("http://127.0.0.1:%d", hostPort)
@@ -56,11 +57,11 @@ func StartProxyService(
 	// Shutdown handler
 	go func() {
 		<-ctx.Done()
-		Log.Info().Msg("Shutting down proxy server.")
+		util.Log.Info().Msg("Shutting down proxy server.")
 		closeError = server.Close()
 	}()
 
-	Log.Info().Msgf(
+	util.Log.Info().Msgf(
 		"localhost proxy up\n%s",
 		strings.Join(
 			lo.Map(availableSubdomains, func(subdomain string, _ int) string {
@@ -74,7 +75,7 @@ func StartProxyService(
 	if err != nil {
 		switch err {
 		case http.ErrServerClosed:
-			Log.Info().Msg("Proxy server closed successfully.")
+			util.Log.Info().Msg("Proxy server closed successfully.")
 		default:
 			return err
 		}

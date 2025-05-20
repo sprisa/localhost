@@ -1,0 +1,12 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "Test Pkg",
+  "main": "index.js",
+  "scripts": {
+    "env": "env",
+    "print": "echo hello world > hello.txt"
+  },
+  "author": "",
+  "license": "MIT"
+}

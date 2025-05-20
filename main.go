@@ -11,12 +11,11 @@ import (
 
 	"github.com/cqroot/prompt"
 	"github.com/cqroot/prompt/choose"
-	"github.com/rs/zerolog"
 	"github.com/samber/lo"
+	"github.com/sprisa/localhost/command"
+	"github.com/sprisa/localhost/util"
 	"github.com/urfave/cli/v3"
 )
-
-var Log = zerolog.New(zerolog.NewConsoleWriter())
 
 const defaultHostPort = 5050
 
@@ -26,10 +25,13 @@ func main() {
 		Name:      "localhost",
 		Usage:     "Local https services",
 		UsageText: "localhost [port]",
+		Commands: []*cli.Command{
+			command.RunCommand,
+		},
 		Flags: []cli.Flag{
 			&cli.IntFlag{
 				Name:    "host-port",
-				Aliases: []string{"h"},
+				Aliases: []string{"p"},
 				Value:   defaultHostPort,
 			},
 			&cli.BoolFlag{
@@ -42,7 +44,7 @@ func main() {
 			hostPort := cmd.Int("host-port")
 			portStr := cmd.Args().First()
 			if portStr == "" {
-				return fmt.Errorf("Port is required")
+				return cli.ShowAppHelp(cmd)
 			}
 			port, err := strconv.Atoi(portStr)
 			if err != nil {
@@ -130,7 +132,7 @@ func main() {
 
 	err := cmd.Run(context.Background(), os.Args)
 	if err != nil {
-		Log.Error().Msg(err.Error())
+		util.Log.Error().Msg(err.Error())
 		defer os.Exit(1)
 	}
 }
