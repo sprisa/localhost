@@ -51,6 +51,7 @@ var RunCommand = &cli.Command{
 		// Pass along existing environment
 		cmd.Env = os.Environ()
 		cmd.Stdin = os.Stdin
+		// TODO: Read from stdout to find the exposed port. Similar to how vscode port proxy works.
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 
