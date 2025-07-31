@@ -2,6 +2,8 @@
 
 Local development certs for LAN https services.
 
+Localhost exposes https services available at `svc.host`
+
 ## Install
 
 ### With Go
