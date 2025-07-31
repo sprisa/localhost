@@ -1,4 +1,7 @@
 # localhost
+![Chromium HSTS preload](https://img.shields.io/hsts/preload/svc.host)
+
+
 
 Local development certs for LAN https services.
 
