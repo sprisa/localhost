@@ -42,7 +42,7 @@ func StartProxyService(
 
 	// Proxy request handler
 	handler.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
-		res.Header().Add("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
+		res.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
 		proxy.ServeHTTP(res, req)
 	})
 
