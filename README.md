@@ -18,23 +18,27 @@ TODO
 
 ## Usage
 
-Serve the service at port `3000`
+#### Serve the service at port `3000`
 ```sh
 localhost 3000
 ```
 
-Serve on all interfaces
+Navigate to the https service at [`https://local.svc.host:5050`](https://local.svc.host:5050)
+
+#### Serve on all interfaces
 ```sh
 localhost 3000 -a
 ```
 
-Change the proxy port. Defaults to port `5050`
+#### Change the proxy port. Defaults to port `5050`
 ```sh
 localhost 3000 -p 3001
 ```
 
+[`https://local.svc.host:3001`](https://local.svc.host:3001)
 
-Show Help
+
+#### Show Help
 ```sh
 localhost --help
 ```
