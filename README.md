@@ -1,7 +1,7 @@
 # localhost
 ![Chromium HSTS preload](https://img.shields.io/hsts/preload/svc.host) ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fsvc.host%2Fbadge)
 
-
+![Terminal Example](./docs/term.png)
 
 
 Local development certs for LAN https services.
