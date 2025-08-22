@@ -11,8 +11,8 @@ Localhost exposes local insecure http services as fully encrypted https availabl
 ## Install
 
 ```sh
-brew install sprisa/tap/localhost # With Homebrew
-go install github.com/sprisa/localhost@latest # With go install (doesn't auto update)
+brew install sprisa/tap/localhost             # With Homebrew (MacOS / Linux)
+go install github.com/sprisa/localhost@latest # With Go (Any platform — doesn't auto update)
 ```
 
 ## Usage
