@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 	"net"
 	"os"
@@ -122,11 +121,7 @@ func main() {
 				availableSubdomains = append(availableSubdomains, ipToSubdomain(addrIp))
 			}
 
-			tlsCert, err := tls.X509KeyPair(cert, certKey)
-			if err != nil {
-				return err
-			}
-			return StartProxyService(ctx, tlsCert, addrIp, hostPort, port, availableSubdomains)
+			return StartProxyService(ctx, addrIp, hostPort, port, availableSubdomains)
 		},
 	}
 

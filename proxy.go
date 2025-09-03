@@ -4,6 +4,8 @@ import (
 	"context"
 	"crypto/tls"
 	_ "embed"
+	"encoding/gob"
+	"encoding/hex"
 	"fmt"
 	"net"
 	"net/http"
@@ -15,20 +17,47 @@ import (
 	"github.com/sprisa/localhost/util"
 )
 
-//go:embed ssl/cert.pem
-var cert []byte
-
-//go:embed ssl/key.pem
-var certKey []byte
+type Certificate struct {
+	Cert []byte
+	Key  []byte
+}
 
 func StartProxyService(
 	ctx context.Context,
-	tlsCert tls.Certificate,
 	addrIp net.IP,
 	listenPort int,
 	hostPort int,
 	availableSubdomains []string,
 ) error {
+	// res, err := http.Get("http://localhost:8080/certs")
+	res, err := http.Get("https://svc.host/certs")
+	if err != nil {
+		return util.WrapError(err, "error fetching certs")
+	}
+	decoder := gob.NewDecoder(res.Body)
+	certificate := &Certificate{}
+	err = decoder.Decode(certificate)
+	if err != nil {
+		return util.WrapError(err, "error decoding certificate")
+	}
+
+	cert := make([]byte, hex.DecodedLen(len(certificate.Cert)))
+	_, err = hex.Decode(cert, certificate.Cert)
+	if err != nil {
+		return util.WrapError(err, "error decoding certificate.Cert")
+	}
+
+	certKey := make([]byte, hex.DecodedLen(len(certificate.Key)))
+	_, err = hex.Decode(certKey, certificate.Key)
+	if err != nil {
+		return util.WrapError(err, "error decoding certificate.Key")
+	}
+
+	tlsCert, err := tls.X509KeyPair(cert, certKey)
+	if err != nil {
+		return util.WrapError(err, "error creating tls cert")
+	}
+
 	log := util.Log.With().Int("targetPort", hostPort).Logger()
 	handler := http.NewServeMux()
 
