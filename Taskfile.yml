@@ -1,0 +1,23 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  TYPE: build
+
+tasks:
+  build:go:
+    cmd: goreleaser {{if eq .TYPE "publish"}}release{{else}}build{{end}} --clean {{if eq .TYPE "build"}}--snapshot{{end}}
+    sources:
+      - ./**/*.go
+      - .goreleaser.yaml
+    generates:
+      - ./dist/**/*
+      - exclude: ./dist/**/npm/**
+
+  build:npm:
+    deps: [build:go]
+    # TODO: Fix publisher. license file should be in all caps to npm picks it up
+    # TODO: Publisher doesn't work with npm one time tokens
+    cmds:
+      - npx -y goreleaser-npm-publisher@latest {{.TYPE}} --clean --prefix @sprisa --keywords https tls-certificate dns letsencrypt https-certificate
