@@ -1,5 +1,5 @@
 # localhost
-![Chromium HSTS preload](https://img.shields.io/hsts/preload/svc.host) ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fsvc.host%2Fbadge)
+![GitHub Release](https://img.shields.io/github/v/release/sprisa/localhost?color=blue) ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fsvc.host%2Fbadge)
 
 ![Terminal Example](./docs/term.png)
 
@@ -10,9 +10,24 @@ Localhost exposes local insecure http services as fully encrypted https availabl
 
 ## Install
 
+**Homebrew (auto updates)**  
 ```sh
-brew install sprisa/tap/localhost             # With Homebrew (MacOS / Linux)
-go install github.com/sprisa/localhost@latest # With Go (Any platform — doesn't auto update)
+brew install sprisa/tap/localhost   
+```
+
+**NPM**  
+![NPM Version](https://img.shields.io/npm/v/%40sprisa%2Flocalhost?color=blue)  ![NPM Downloads](https://img.shields.io/npm/dm/%40sprisa%2Flocalhost?color=blue)  
+
+
+```sh
+npx @sprisa/localhost 3000 -a
+```
+
+**Golang Source**  
+With Go (Any platform — doesn't auto update)  
+
+```sh
+go install github.com/sprisa/localhost@latest
 ```
 
 ## Usage
