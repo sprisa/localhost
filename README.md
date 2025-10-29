@@ -1,5 +1,5 @@
 # localhost
-![GitHub Release](https://img.shields.io/github/v/release/sprisa/localhost?color=blue) ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fsvc.host%2Fbadge)
+ ![GitHub Release](https://img.shields.io/github/v/release/sprisa/localhost?color=blue) ![GitHub License](https://img.shields.io/github/license/sprisa/localhost?color=green)  ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fsvc.host%2Fbadge)
 
 ![Terminal Example](./docs/term.png)
 
