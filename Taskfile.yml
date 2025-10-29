@@ -1,0 +1,15 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  TYPE: build
+
+tasks:
+  build:go:
+    cmd: goreleaser {{.TYPE}} --clean {{if eq .TYPE "build"}}--snapshot{{end}}
+
+  build:npm:
+    deps: [build:go]
+    cmds:
+      - npx -y goreleaser-npm-publisher@latest {{.TYPE}} --clean -prefix @sprisa --keywords https tls-certificate dns letsencrypt https-certificate
