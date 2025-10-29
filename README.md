@@ -74,3 +74,10 @@ Only private IP ranges are supported.
 
 - localtls - https://github.com/Corollarium/localtls
 - sslip.io - https://sslip.io/
+
+
+### Public Internet Tunnels
+
+`localhost` is not a tunnel for the public internet. It connects any devices that are already on the same subnet, such as LAN or a mesh VPN. If you need an internet tunnel check out [anderspitman/awesome-tunneling](https://github.com/anderspitman/awesome-tunneling).
+
+
