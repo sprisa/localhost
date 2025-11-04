@@ -1,0 +1,38 @@
+{
+  "package.json": {
+    "name": "@sprisa/localhost",
+    "version": "0.0.4",
+    "description": "Run secure services on localhost with 0-config certs (TLS / WSS). HTTPS connections for any device on LAN or mesh VPN.",
+    "license": "MPL-2.0",
+    "author": "Gabriel Meola <banter@gabe.mx>",
+    "keywords": [
+      "dns",
+      "letsencrypt",
+      "tls",
+      "https",
+      "https-proxy",
+      "tls-certificate",
+      "tls-proxy",
+      "https-certificate",
+      "localhost-ssl"
+    ],
+    "homepage": "https://github.com/sprisa/localhost",
+    "bugs": {
+      "url": "https://github.com/sprisa/localhost/issues"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/sprisa/localhost.git"
+    }
+  },
+  "bin": "localhost",
+  "gobuild": "go build -ldflags=\"-s -w\"",
+  "platforms": [
+    "linux/amd64",
+    "linux/arm64",
+    "darwin/amd64",
+    "darwin/arm64",
+    "windows/amd64",
+    "windows/arm64"
+  ]
+}

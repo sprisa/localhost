@@ -16,8 +16,5 @@ tasks:
       - exclude: ./dist/**/npm/**
 
   build:npm:
-    deps: [build:go]
-    # TODO: Fix publisher. license file should be in all caps to npm picks it up
-    # TODO: Publisher doesn't work with npm one time tokens
     cmds:
-      - npx -y goreleaser-npm-publisher@latest {{.TYPE}} --clean --prefix @sprisa --keywords https tls-certificate dns letsencrypt https-certificate
+      - npx @sprisa/npmreleaser@latest build {{if eq .TYPE "publish"}}--publish{{end}}
