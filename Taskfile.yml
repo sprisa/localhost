@@ -8,9 +8,6 @@ vars:
 tasks:
   build:go:
     cmd: goreleaser {{if eq .TYPE "publish"}}release{{else}}build{{end}} --clean {{if eq .TYPE "build"}}--snapshot{{end}}
-    sources:
-      - ./**/*.go
-      - .goreleaser.yaml
     generates:
       - ./dist/**/*
       - exclude: ./dist/**/npm/**
