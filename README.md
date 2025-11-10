@@ -20,6 +20,8 @@ brew install sprisa/tap/localhost
 
 
 ```sh
+npm i -g @sprisa/localhost
+# or run directly
 npx @sprisa/localhost 3000 -a
 ```
 
