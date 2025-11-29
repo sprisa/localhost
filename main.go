@@ -11,7 +11,6 @@ import (
 	"github.com/cqroot/prompt"
 	"github.com/cqroot/prompt/choose"
 	"github.com/samber/lo"
-	"github.com/sprisa/localhost/command"
 	"github.com/sprisa/localhost/util"
 	"github.com/urfave/cli/v3"
 )
@@ -25,7 +24,7 @@ func main() {
 		Usage:     "Local https services",
 		UsageText: "localhost [port]",
 		Commands: []*cli.Command{
-			command.RunCommand,
+			// command.RunCommand,
 		},
 		Flags: []cli.Flag{
 			&cli.IntFlag{
