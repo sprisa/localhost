@@ -14,7 +14,8 @@ import (
 	"strings"
 
 	"github.com/samber/lo"
-	"github.com/sprisa/localhost/util"
+	"github.com/sprisa/x/errutil"
+	l "github.com/sprisa/x/log"
 )
 
 type Certificate struct {
@@ -32,33 +33,33 @@ func StartProxyService(
 	// res, err := http.Get("http://localhost:8080/certs")
 	res, err := http.Get("https://svc.host/certs")
 	if err != nil {
-		return util.WrapError(err, "error fetching certs")
+		return errutil.WrapErr(err, "error fetching certs")
 	}
 	decoder := gob.NewDecoder(res.Body)
 	certificate := &Certificate{}
 	err = decoder.Decode(certificate)
 	if err != nil {
-		return util.WrapError(err, "error decoding certificate")
+		return errutil.WrapErr(err, "error decoding certificate")
 	}
 
 	cert := make([]byte, hex.DecodedLen(len(certificate.Cert)))
 	_, err = hex.Decode(cert, certificate.Cert)
 	if err != nil {
-		return util.WrapError(err, "error decoding certificate.Cert")
+		return errutil.WrapErr(err, "error decoding certificate.Cert")
 	}
 
 	certKey := make([]byte, hex.DecodedLen(len(certificate.Key)))
 	_, err = hex.Decode(certKey, certificate.Key)
 	if err != nil {
-		return util.WrapError(err, "error decoding certificate.Key")
+		return errutil.WrapErr(err, "error decoding certificate.Key")
 	}
 
 	tlsCert, err := tls.X509KeyPair(cert, certKey)
 	if err != nil {
-		return util.WrapError(err, "error creating tls cert")
+		return errutil.WrapErr(err, "error creating tls cert")
 	}
 
-	log := util.Log.With().Int("targetPort", hostPort).Logger()
+	log := l.Log.With().Int("targetPort", hostPort).Logger()
 	handler := http.NewServeMux()
 
 	target := fmt.Sprintf("http://127.0.0.1:%d", hostPort)
@@ -86,11 +87,11 @@ func StartProxyService(
 	// Shutdown handler
 	go func() {
 		<-ctx.Done()
-		util.Log.Info().Msg("Shutting down proxy server.")
+		l.Log.Info().Msg("Shutting down proxy server.")
 		closeError = server.Close()
 	}()
 
-	util.Log.Info().Msgf(
+	l.Log.Info().Msgf(
 		"localhost proxy up\n%s",
 		strings.Join(
 			lo.Map(availableSubdomains, func(subdomain string, _ int) string {
@@ -104,7 +105,7 @@ func StartProxyService(
 	if err != nil {
 		switch err {
 		case http.ErrServerClosed:
-			util.Log.Info().Msg("Proxy server closed successfully.")
+			l.Log.Info().Msg("Proxy server closed successfully.")
 		default:
 			return err
 		}

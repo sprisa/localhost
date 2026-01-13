@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/sprisa/localhost/util"
+	"github.com/sprisa/x/errutil"
 	"github.com/urfave/cli/v3"
 )
 
@@ -25,20 +25,20 @@ var RunCommand = &cli.Command{
 
 		cwd, err := os.Getwd()
 		if err != nil {
-			return util.WrapError(err, "unable to find current working directory")
+			return errutil.WrapErr(err, "unable to find current working directory")
 		}
 		pkgJsonPath := filepath.Join(cwd, "package.json")
 		jsonBytes, err := os.ReadFile(pkgJsonPath)
 		if err != nil {
-			return util.WrapError(err, "error reading package.json")
+			return errutil.WrapErr(err, "error reading package.json")
 		}
 		pkg := new(PkgJson)
 		err = json.Unmarshal(jsonBytes, pkg)
 		if err != nil {
-			return util.WrapError(err, "error parsing package.json (%s)", pkgJsonPath)
+			return errutil.WrapErr(err, "error parsing package.json (%s)", pkgJsonPath)
 		}
 
-		// util.Log.Info().Msgf("%+v", pkg)
+		// errutil.Log.Info().Msgf("%+v", pkg)
 
 		scriptCommand, hasScriptCommand := pkg.Scripts[scriptName]
 		if !hasScriptCommand {

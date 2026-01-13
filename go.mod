@@ -1,11 +1,12 @@
 module github.com/sprisa/localhost
 
-go 1.24.3
+go 1.25.5
 
 require (
 	github.com/cqroot/prompt v0.9.4
-	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.50.0
+	github.com/sprisa/x/errutil v0.0.0-20260112164508-35cacfce2dc9
+	github.com/sprisa/x/log v0.0.0-20260112164508-35cacfce2dc9
 	github.com/urfave/cli/v3 v3.3.3
 )
 
@@ -28,6 +29,7 @@ require (
 	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.15.2 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
+	github.com/rs/zerolog v1.34.0 // indirect
 	golang.org/x/sync v0.11.0 // indirect
 	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/term v0.6.0 // indirect
